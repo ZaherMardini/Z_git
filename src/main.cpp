@@ -1,38 +1,59 @@
-#include <iostream>
+
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <string>
-using namespace std;
-int main(int argc, char *argv[])
+
+namespace fs = std::filesystem;
+
+int init_command()
 {
-    cout << unitbuf;
-    cerr << unitbuf;
-    if(argc < 2){
-        cout << "Usage: ./<program name> <command>\n";
-        return EXIT_FAILURE;
-    }
-    string command = argv[1];
-    if(command == "init"){
-        try{
-            filesystem::create_directories(".z_git/objects");
-            filesystem::create_directories(".z_git/refs");
-            // making the file and writing to it
-            ofstream headFile(".z_git/HEAD");
-            if(headFile.is_open()){
-                headFile << "ref: refs/heads/main";
-                headFile.close();
-            }
-            if(!headFile){
-                cerr << "Writing to file failed\n";
-            }
-        }
-        catch(filesystem::filesystem_error &e){
-            cerr << e.what();
+    try {
+        fs::create_directories(".z_git/objects");
+        fs::create_directories(".z_git/refs");
+
+        std::ofstream headFile(".z_git/HEAD");
+
+        if (!headFile) {
+            std::cerr << "Failed to open .z_git/HEAD\n";
             return EXIT_FAILURE;
         }
+
+        headFile << "ref: refs/heads/main";
+        headFile.close();
+
+        if (!headFile) {
+            std::cerr << "Failed to write to .z_git/HEAD\n";
+            return EXIT_FAILURE;
+        }
+
+        return EXIT_SUCCESS;
     }
-    else{
-        cerr << "Unknown command\n";
+    catch (const fs::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << '\n';
         return EXIT_FAILURE;
     }
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc < 2) {
+        std::cerr << "Usage: ./build_your_git <command>\n";
+        return EXIT_FAILURE;
+    }
+
+    const std::string command = argv[1];
+
+    if (command == "init") {
+        if (init_command() != EXIT_SUCCESS) {
+            return EXIT_FAILURE;
+        }
+
+        std::cout << "Git initialized successfully\n";
+        return EXIT_SUCCESS;
+    }
+
+    std::cerr << "Unknown command: " << command << '\n';
+    return EXIT_FAILURE;
 }
