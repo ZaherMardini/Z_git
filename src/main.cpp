@@ -10,25 +10,25 @@ using namespace std;
 namespace fs = std::filesystem;
 
 void init(){
-    fs::create_directories(".z_git/objects");
-    fs::create_directories(".z_git/refs");
+    fs::create_directories(".git/objects");
+    fs::create_directories(".git/refs");
 
-    ofstream headFile(".z_git/HEAD");
+    ofstream headFile(".git/HEAD");
 
     if (!headFile) {
-        throw runtime_error("Failed to open .z_git/HEAD");
+        throw runtime_error("Failed to open .git/HEAD");
     }
 
     headFile << "ref: refs/heads/main\n";
 
     if (!headFile) {
-        throw runtime_error("Failed to write to .z_git/HEAD");
+        throw runtime_error("Failed to write to .git/HEAD");
     }
 
     headFile.close();
 
     if (!headFile) {
-        throw runtime_error("Failed to close .z_git/HEAD");
+        throw runtime_error("Failed to close .git/HEAD");
     }
 }
 
