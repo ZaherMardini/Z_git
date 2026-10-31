@@ -2,15 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug active C++ file with init",
+            "name": "Debug active C++ file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["init"],
+            // "args": ["init"],
+            "args": ["cat-file", "-p", "4d3dd1adc0085e4f30ff6c5581eabae84cf0d49e"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "externalConsole": false,
             "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+            ],
             "preLaunchTask": "C/C++: g++ build active file"
         }
     ]
