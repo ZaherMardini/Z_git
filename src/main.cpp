@@ -83,7 +83,7 @@ string catFile(string hash){
     if (headerEndIndex == dest.size()) {
         throw runtime_error("Invalid Git object: missing header separator");
     }
-    int contentStartIndex = headerEndIndex++;
+    int contentStartIndex = ++headerEndIndex;
     string content = ""; 
     for (size_t i = contentStartIndex; i < dest.size(); i++) {
         content += static_cast<char>(dest[i]);
